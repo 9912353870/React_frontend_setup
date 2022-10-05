@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/frontend/static/css/main.561a777a.css",
+    "main.js": "/frontend/static/js/main.5a2d9596.js",
+    "static/js/787.cda612ba.chunk.js": "/frontend/static/js/787.cda612ba.chunk.js",
+    "static/media/EYLeftBanner.PNG": "/frontend/static/media/EYLeftBanner.de71089b721572fc3ab4.PNG",
+    "static/media/ey.PNG": "/frontend/static/media/ey.d145984e1c254895b012.PNG",
+    "static/media/logo.svg": "/frontend/static/media/logo.cae16b929b4fa4531dc6d512c620da3b.svg",
+    "index.html": "/frontend/index.html",
+    "main.561a777a.css.map": "/frontend/static/css/main.561a777a.css.map",
+    "main.5a2d9596.js.map": "/frontend/static/js/main.5a2d9596.js.map",
+    "787.cda612ba.chunk.js.map": "/frontend/static/js/787.cda612ba.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.561a777a.css",
+    "static/js/main.5a2d9596.js"
+  ]
+}
