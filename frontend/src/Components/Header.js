@@ -17,11 +17,11 @@ import { Logout } from "@mui/icons-material";
 
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
-const details = ["EY_Super_Admin"];
 
 const ResponsiveAppBar = ({ open, handleDrawerOpen, selectedTab = "" }) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [details, setDetails] = React.useState([]);
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -35,6 +35,9 @@ const ResponsiveAppBar = ({ open, handleDrawerOpen, selectedTab = "" }) => {
     setAnchorElUser(null);
   };
 
+  React.useEffect(() => {
+    setDetails([...details, localStorage.getItem("fullname")]);
+  }, []);
   return (
     // <Container maxWidth="xl" style={{ background: "#fff", color: "black" }}>
     <Toolbar disableGutters>
