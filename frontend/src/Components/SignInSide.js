@@ -30,6 +30,8 @@ export default function SignInSide() {
   const [password, setPassword] = useState("");
   const [otp, setOTP] = useState("");
   const [isOtpSent, setOtpSent] = useState(false);
+  const [enableFP, setEnableFP] = useState(false);
+  const [fpemail, setFpEmail] = useState("");
   const [snackData, setSnackData] = useState({ isOpen: false, msg: "" });
   const intialErrorState = {
     name: {
@@ -46,6 +48,10 @@ export default function SignInSide() {
     },
     otp: {
       field: "otp",
+      error: false,
+    },
+    fpemail: {
+      field: "fpemail",
       error: false,
     },
   };
@@ -82,6 +88,20 @@ export default function SignInSide() {
     }
 
     redirectToPage("/dashboard");
+  };
+
+  const submitFpEmail = () => {
+    setErrorStatus({
+      ...errorStatus,
+      fpemail: { error: !isValidEmail(fpemail) },
+    });
+    if (!isValidEmail(fpemail)) {
+      setSnackData({ isOpen: true, msg: "Please enter a valid email id!" });
+      return;
+    } else {
+      setEnableFP(false);
+      return;
+    }
   };
 
   useEffect(() => {}, []);
@@ -129,7 +149,7 @@ export default function SignInSide() {
               style={{ maxWidth: "100px", maxHeight: "150px" }}
             />
             <Box component="form" noValidate sx={{ mt: 1, pt: 1 }}>
-              {!isOtpSent && (
+              {!enableFP && !isOtpSent && (
                 <>
                   <CustomTextField
                     id="name"
@@ -180,7 +200,11 @@ export default function SignInSide() {
 
                   <Grid container>
                     <Grid item xs>
-                      <Link href="#" variant="body2">
+                      <Link
+                        href="#"
+                        variant="body2"
+                        onClick={() => setEnableFP(true)}
+                      >
                         Forgot password?
                       </Link>
                     </Grid>
@@ -192,7 +216,32 @@ export default function SignInSide() {
                   </Grid>
                 </>
               )}
-              {isOtpSent && (
+              {enableFP && !isOtpSent && (
+                <>
+                  <CustomTextField
+                    id="fpUserEmail"
+                    placeholder="Enter Mail Id"
+                    action={(e) => {
+                      setFpEmail(e.target.value);
+                    }}
+                    variant="outlined"
+                    value={fpemail}
+                    errorStatus={errorStatus?.fpemail?.error}
+                  />
+                  <Button
+                    type="button"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2, color: "black", background: "yellow" }}
+                    onClick={() => {
+                      submitFpEmail();
+                    }}
+                  >
+                    Submit
+                  </Button>
+                </>
+              )}
+              {isOtpSent && !enableFP && (
                 <>
                   <CustomTextField
                     id="otp"
