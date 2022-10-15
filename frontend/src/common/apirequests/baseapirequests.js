@@ -1,10 +1,11 @@
-import { URLS } from "../../constants/urls";
+import env from "react-dotenv";
 
 export const postRequest = async (url, payload) => {
-  return fetch(URLS.BASE_URL + url, {
+  return fetch(env.API_URL + url, {
     method: "POST",
     headers: {
       Accept: "application/json",
+      mode: "cors",
       "Content-Type": "application/json",
     },
     body: JSON.stringify(payload),
@@ -17,7 +18,7 @@ export const postRequest = async (url, payload) => {
 };
 
 export const postRequestWithAuth = async (url, payload) => {
-  return fetch(URLS.BASE_URL + url, {
+  return fetch(env.API_URL + url, {
     method: "POST",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("access"),
@@ -34,7 +35,7 @@ export const postRequestWithAuth = async (url, payload) => {
 };
 
 export const getRequest = async (url, payload) => {
-  return fetch(URLS.BASE_URL + url, {
+  return fetch(env.API_URL + url, {
     method: "get",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("access"),
@@ -61,7 +62,7 @@ export const getRequest = async (url, payload) => {
 };
 
 export const getRequestNoAuth = async (url, payload) => {
-  return fetch(URLS.BASE_URL + url, {
+  return fetch(env.API_URL + url, {
     method: "get",
     headers: {
       Accept: "application/json",
@@ -79,7 +80,7 @@ export const getRequestNoAuth = async (url, payload) => {
 };
 
 export const getByIdRequest = async (url, payload) => {
-  return fetch(URLS.BASE_URL + url + `/${payload}`, {
+  return fetch(env.API_URL + url + `/${payload}`, {
     method: "get",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("access"),
@@ -95,7 +96,7 @@ export const getByIdRequest = async (url, payload) => {
 };
 
 export const putRequest = async (url, payload) => {
-  return fetch(URLS.BASE_URL + url, {
+  return fetch(env.API_URL + url, {
     method: "PUT",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("access"),
@@ -113,7 +114,7 @@ export const putRequest = async (url, payload) => {
 };
 
 export const putRequestNoAuth = async (url, payload) => {
-  return fetch(URLS.BASE_URL + url, {
+  return fetch(env.API_URL + url, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -130,7 +131,7 @@ export const putRequestNoAuth = async (url, payload) => {
 };
 
 export const patchRequest = async (url, payload) => {
-  return fetch(URLS.BASE_URL + url, {
+  return fetch(env.API_URL + url, {
     method: "PATCH",
     headers: {
       Accept: "application/json",
@@ -147,7 +148,7 @@ export const patchRequest = async (url, payload) => {
 };
 
 export const patchRequestNoAuth = async (url, payload) => {
-  return fetch(URLS.BASE_URL + url, {
+  return fetch(env.API_URL + url, {
     method: "PATCH",
     headers: {
       Accept: "application/json",
@@ -164,7 +165,7 @@ export const patchRequestNoAuth = async (url, payload) => {
 };
 
 export const deleteRequest = async (url, payload) => {
-  return fetch(URLS.BASE_URL + url, {
+  return fetch(env.API_URL + url, {
     method: "delete",
     headers: {
       Authorization: "Bearer " + localStorage.getItem("access"),

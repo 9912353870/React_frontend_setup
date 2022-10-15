@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Avatar from "@mui/material/Avatar";
+import env from "react-dotenv";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -21,6 +21,7 @@ import logo from "../assets/logo.svg";
 import { isValidEmail, redirectToPage } from "../Utils/utils";
 import EYLeftBanner from "../assets/EYLeftBanner.PNG";
 import { Alert } from "@mui/material";
+import { postRequest } from "../common/apirequests/baseapirequests";
 
 const theme = createTheme();
 
@@ -57,7 +58,7 @@ export default function SignInSide() {
   };
   const [errorStatus, setErrorStatus] = useState(intialErrorState);
 
-  const loginUser = () => {
+  const loginUser = async () => {
     setErrorStatus({
       ...errorStatus,
       name: { error: !name },
@@ -76,7 +77,48 @@ export default function SignInSide() {
       setSnackData({ isOpen: true, msg: "Please enter a valid password!" });
       return;
     }
-    console.log({ name, email, password });
+    let loginrequest = await postRequest("v1/user/login", {
+      email,
+      password,
+    });
+
+    // loginrequest = {
+    //   uid: 1,
+    //   first_name: "test",
+    //   last_name: "user",
+    //   email: "test@user.com",
+    //   refresh:
+    //     "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY2NTkyMjc0NSwiaWF0IjoxNjY1ODM2MzQ1LCJqdGkiOiJlM2E3OTE4ZWI1MTI0MjMzYWQzMjQ4MmIxMGEwZTQ3NiIsInVzZXJfaWQiOjF9.g3GwOewt-7uQoay2olKiyTNOkmeVuftZNZwQeveysFY",
+    //   access:
+    //     "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjY1ODM5OTQ1LCJpYXQiOjE2NjU4MzYzNDUsImp0aSI6IjE3MjQ4YjYyNDg3MTRmOTA4ZmE1ZTY1ODU3ZjQ1ZTlhIiwidXNlcl9pZCI6MX0.pAm848wEqNMTW4JdwAyHiwmF5Vi5m4nkUwcUTT6uVkA",
+    //   user_type: [],
+    //   send: "verification otp sent successfully",
+    // };
+
+    if (loginrequest.send) {
+      // setSnackData({isOpen: true, msg: 'OTP sent successfully!'});
+      localStorage.setItem("uid", loginrequest.uid);
+
+      localStorage.setItem("refresh", loginrequest.refresh);
+      localStorage.setItem("access", loginrequest.access);
+      localStorage.setItem("currentTab", "one");
+
+      localStorage.setItem(
+        "fullname",
+        loginrequest.first_name + " " + loginrequest.last_name
+      );
+      localStorage.setItem("user_type", loginrequest.user_type);
+
+      setSnackData({
+        isOpen: true,
+        msg: "Logged in successfully!",
+        type: "success",
+      });
+      //setOtpSent(true);
+    } else {
+      setSnackData({ isOpen: true, msg: "Something went wrong!" });
+    }
+
     setOtpSent(true);
   };
 
@@ -99,7 +141,24 @@ export default function SignInSide() {
       setSnackData({ isOpen: true, msg: "Please enter a valid email id!" });
       return;
     } else {
-      setEnableFP(false);
+      let resetPassword = postRequest("v1/user/send-password-link/", {
+        email: fpemail,
+      });
+      // resetPassword = {
+      //   success: "an email hase bin sent to reset password",
+      // };
+
+      if (resetPassword?.success) {
+        setSnackData({
+          isOpen: true,
+          msg: resetPassword?.success,
+          type: "success",
+        });
+        setFpEmail("");
+        setEnableFP(false);
+      } else {
+        setSnackData({ isOpen: true, msg: "Something went wrong!" });
+      }
       return;
     }
   };
@@ -275,7 +334,7 @@ export default function SignInSide() {
           onClose={() => {
             setSnackData({ isOpen: false, msg: "" });
           }}
-          type="error"
+          type={snackData.type || "error"}
         />
       </Grid>
     </ThemeProvider>
